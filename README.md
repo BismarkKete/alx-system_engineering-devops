@@ -1,1 +1,1 @@
-Created this repository
+Scripts to do some cool stuffs
