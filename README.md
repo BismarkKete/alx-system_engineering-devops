@@ -1,1 +1,1 @@
-Scripts to do some cool stuffs
+Created this repository for system engineering devops
