@@ -1,0 +1,5 @@
+# SSH config
+
+Host *
+	IdentufyFile ~/.ssh/school
+	PasswordAuthentication no
