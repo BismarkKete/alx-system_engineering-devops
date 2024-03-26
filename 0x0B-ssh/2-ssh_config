@@ -1,4 +1,4 @@
-# SSH config
+# SSH config file
 
 Host 194414-web-01
 	IdentityFile ~/.ssh/school
