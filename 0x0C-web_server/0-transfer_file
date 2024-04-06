@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-
 # Transfer file from local computer to server
 if [ $# -lt 3 ];
 then
