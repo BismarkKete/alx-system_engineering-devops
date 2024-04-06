@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+# configure new nginx server so that /redirect_me is redirecting to
+# another page.
+
+# installing nginx
+sudo apt-get update -y
+sudo apt-get install nginx -y
+
+# starting nginx
+sudo service nginx start
+
+# firewall - allowing nginx
+sudo ufw allow 'Nginx HTTP'
+
+# changing user ownership
+sudo chown -R "$USER":"$USER" /var/www/html
+sudo chmod -R 755 /var/www/html
+
+# creating backup
+cp /var/www/html/index.nginx-debian.html /var/www/html/index.nginx-debian.html.bckp
+
+# creating an index file
+echo 'Hello World!' > /var/www/html/index.nginx-debian.html
+
+# redirection
+sudo sed -i '/listen 80 default_server/a rewrite ^/redirect_me https://www.youtube.com/watch?v=QH2-TGUlwu4 permanent;' /etc/nginx/sites-available/default
+
+# setting page not found 404
+echo "Ceci n'est pas une page" >> /var/www/html/not_found_404.html
+sudo sed -i "46i error_page 404 /not_found_404.html;" /etc/nginx/sites-available/default
+
+# restarting nginx
+sudo service nginx restart
