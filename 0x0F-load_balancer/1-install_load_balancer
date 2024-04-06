@@ -1,0 +1,54 @@
+#!/usr/bin/env bash
+# load balancer installing
+
+function install() {
+	command -v "$1" &> /dev/null
+
+	# disabling shellcheck SC2181
+	if [ $? -ne 0 ]
+	then
+		sudo apt-get update -y
+		sudo apt-get install -y "$1"
+		echo -e "\n"
+	else
+		echo -e "${1} is already installed\n"
+	fi
+}
+
+# installing haproxy
+install haproxy
+
+# backing up
+sudo cp /etc/haproxy/haproxy.cfg /etc/haproxy/haproxy_default.bckp
+
+configuration_server=\
+"
+defaults
+  mode http
+  timeout client 15s
+  timeout connect 10s
+  timeout server 15s
+  timeout http-request 10s
+
+frontend bismarkcodes-tech-frontend
+    bind *:80
+    default_backend bismarkcodes-tech-backend
+
+backend bismarkcodes-tech-backend
+    balance roundrobin
+    server 194414-web-01 100.24.74.244:80 check
+    server 194414-web-02 100.26.225.2:80 check
+"
+
+# disabling shellcheck SC2154
+echo "$configuration_server" | sudo tee /etc/haproxy/haproxy.cfg
+
+# enable haproxy, using init script, to be started
+echo "ENABLED=1" | sudo tee /etc/default/haproxy
+
+if [ "$(pgrep -c haproxy)" -le 0 ]
+then
+	sudo service haproxy start
+else
+	sudo service haproxy restart
+fi
