@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+# installs nginx and configure it to listen on port 80
+# print "Hello World"
+
+# installing nginx
+sudo apt-get update -y
+sudo apt-get install nginx -y
+
+# starting nginx
+sudo service nginx start
+
+# firewall - allowing nginx
+sudo ufw allow 'Nginx HTTP'
+
+# changing user ownership
+sudo chown -R "$USER":"$USER" /var/www/html
+sudo chmod -R 755 /var/www/html
+
+# creating backup
+cp /var/www/html/index.nginx-debian.html /var/www/html/index.nginx-debian.html.bckp
+
+# creating an index file
+echo 'Hello World!' > /var/www/html/index.nginx-debian.html
+
+# restarting nginx
+sudo service nginx restart
