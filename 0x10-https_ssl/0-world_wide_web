@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+# A script that displays informtation about subdomaindomains.
+# Author: Bismark-K
+
+#set -x
+
+
+#Variables
+
+subdomains=( "www" "lb-01" "web-01" "web-02" )
+domain="$1"
+sub_domain="$2"
+
+dig_cmd () {
+	sub_domain="$2"
+	INFORMARION="$(dig "$sub_domain.$domain" | grep -A1 'ANSWER SECTION:' | awk 'NR==2')"
+	IP_ADDRESS=$(echo "$INFORMARION" | awk '{print $5}')
+	RECORD=$(echo "$INFORMARION" | awk '{print $4}')
+
+	echo -e "The subdomain $sub_domain is a $RECORD record and points to $IP_ADDRESS"
+}
+
+if [ $# -eq 1 ]; then
+	for sub in "${subdomains[@]}"; do
+		dig_cmd "$domain" "$sub"
+	done
+elif [ $# -eq 2 ]; then
+	dig_cmd "$domain" "$sub"
+fi
