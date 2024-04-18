@@ -1,0 +1,24 @@
+global
+        tune.ssl.default-dh-param 2048   # Adding DH parameter configuration
+
+defaults
+        mode http
+        timeout client 15s
+        timeout connect 10s
+        timeout server 15s
+        timeout http-request 10s
+
+frontend bismarkcodes-tech-frontend
+        bind *:80
+        ## listen for https
+        bind *:443 ssl crt /etc/haproxy/certs/bismarkcodes.tech.pem
+
+        redirect scheme https code 301 if !{ ssl_fc }
+
+        default_backend bismarkcodes-tech-backend
+
+backend bismarkcodes-tech-backend
+        balance roundrobin
+        server 194414-web-01 100.24.74.244:80 check
+        server 194414-web-02 100.26.225.2:80 check
+
