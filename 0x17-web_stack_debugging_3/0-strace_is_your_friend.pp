@@ -3,5 +3,6 @@
 
 exec { 'fix wordpress site':
 	command => 'sed -i s/phpp/php/g /var/www/html/wp-settings.php',
-	path    => '/usr/local/bin/:/bin/'
+	path    => '/usr/local/bin/:/bin/',
+	provide => shell
 }
