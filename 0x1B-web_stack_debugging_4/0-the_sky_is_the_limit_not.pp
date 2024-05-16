@@ -1,4 +1,5 @@
 # Increasing the number of traffics our nginx server can handle
+# Author: Bismark-K
 
 # Increase default file
 exec { 'fix--for-nginx':
