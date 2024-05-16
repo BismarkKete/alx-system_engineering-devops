@@ -1,4 +1,5 @@
 # Allowing the user: holberton to log in and handle files without error
+# Author: Bismark-K
 
 # increasing limit for holberton
 exec { 'increase-hard-limit':
